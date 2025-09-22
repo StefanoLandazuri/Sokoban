@@ -1,0 +1,188 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package principal{
+
+class Main{
+    + ventana:JFrame
+    + crearVentana()
+}
+class PanelDelJuego{
+    + actualizarDerecha()
+    + actualizarIzquierda()
+    + actualizarArriba()
+    + actualizarAbajo()
+}
+
+}
+package herramientas{
+
+package constantes{
+enum ConstantesDelJuego{
+    ALTO_DE_PANEL_DE_BOTONES
+    DIMENSION_DE_SPRITE
+    NUMERO_DE_JUGADOR
+    ALTO_DE_CUADRICULA
+    ANCHO_DE_CUADRICULA
+    ANCHO_PANEL_DE_JUEGO
+    ALTO_PANEL_DE_JUEGO
+}
+enum Direccion{
+
+ DIRECCION_GUARDADO_JUGADOR
+ DIRECCION_GUARDADO_NIVEL
+ DIRECCION_GUARDADO_CAJAS
+ DIRECCION_IMAGEN_JUGADOR
+
+}
+enum ConstantesDeMovimiento {
+    ARRIBA
+    ABAJO
+    DERECHA
+    IZQUIERDA
+}
+
+enum Mapa{
+    MAPA1
+    MAPA2
+    MAPA3
+}
+}
+abstract class HerramientaDeGuardado{
+    + guardarDatosDelNivel()
+    + guardarDatosDePosicionDelJugador()
+    + guardarDatosDeCajas()
+    + leerDatosDeCajas()
+    + leerDatosDeNivel()
+    + leerDatosDePosicionDeJugador()
+}
+
+}
+
+package interfacesGraficas{
+class MenuPausa{
+}
+
+class MenuPrincipal{
+    + crearNivel(ventana Jframe)
+}
+
+class Nivel{
+    + númeroDeNivelACrear:int
+    + contadorDeMovimientos:int
+    + reemplazarPanel()
+    + incrementarMovimientosEnPantalla()
+    + crearNivel(JFrame ventana, int numeroDeNivelACrear)
+}
+
+class SelectorNivel{
+    + seleccionarNivel()
+}
+
+}
+
+package sokoban{
+
+class Caja{
+}
+
+class GestorDeSprites{
+    - numeroDeCajas : int
+    - numeroDeMetas :int
+    - numeroDeParedes:int
+    - numeroDeBloqueEnMapa : [][]]int
+    + cargarMapa(String direccionMapa)
+    + dibujarFondo()
+    + cargarBloques()
+    + determinarPosiciones()
+}
+class GestorDeSpritesMovibles{
+    + dibujarSpritesMovibles()
+    + actualizarPorArriba()
+    + actualizarPorAbajo()
+    + actualizarDerecha()
+    + actualizarPorIzquierda()
+    + dibujarSpritesMovibles()
+}
+class Jugador{
+    +obtenerImagen()
+}
+
+class Meta{}
+interface Movible{
+    + actualizarDerecha();
+    + actualizarPorIzquierda();
+    + actualizarPorAbajo();
+    + actualizarPorArriba();
+    + retrocederPorDerecha();
+    + retrocederPorIzquierda()
+    + retrocederPorAbajo()
+    + retrocederPorArriba();
+}
+
+class Pared{
+}
+
+class Piso{
+}
+
+class Posicion{
+    - x:int
+    - y:int
+    + getX()
+    + getY()
+    + setX()
+    + setY()
+}
+
+abstract class Sprite{
+    #imagen BufferedImage
+    #Posicion posicion
+    +dibujar()
+}
+
+class VerificadorDeColisiones{
+    + verificarColisionJugadorYPared(int numeroDeMovimento)
+    + verificarColisionDeCajasYPared(int numeroDeMovimento)
+    + verificarPosicionDeLaCaja(int numeroDeMovimento)
+    + cajaLLegoAMeta()
+}
+
+class SpriteMovible{
+}
+
+Caja --|>SpriteMovible
+Jugador --|>SpriteMovible
+Sprite <|-SpriteMovible
+Sprite-->Posicion
+SpriteMovible..>Movible
+Meta --|>Sprite
+Pared --|>Sprite
+Piso --|>Sprite
+MenuPausa ...> HerramientaDeGuardado
+MenuPausa ..> Nivel
+GestorDeSpritesMovibles-->VerificadorDeColisiones
+GestorDeSpritesMovibles -->"1"Jugador
+GestorDeSpritesMovibles-->"1...n"Caja
+VerificadorDeColisiones..>ConstantesDeMovimiento
+
+GestorDeSprites-->"1"Jugador
+GestorDeSprites-->"1..n"Caja
+GestorDeSprites-->"1..n"Meta
+GestorDeSprites-->"1..n"Pared
+GestorDeSprites-->"1..n"Piso
+GestorDeSprites...>ConstantesDelJuego
+GestorDeSprites..>Mapa
+
+PanelDelJuego-->GestorDeSprites
+
+PanelDelJuego..>ConstantesDelJuego
+Main..>MenuPrincipal
+SelectorNivel..>Nivel
+MenuPrincipal..>Nivel
+Nivel-->"1"PanelDelJuego
+
+Jugador...>Direccion
+HerramientaDeGuardado...>Direccion
+
+@enduml
